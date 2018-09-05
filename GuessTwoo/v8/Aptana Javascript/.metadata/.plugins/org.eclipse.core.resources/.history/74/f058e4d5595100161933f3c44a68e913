@@ -1,0 +1,40 @@
+
+<div id="currentStoryResultsDiv" value="' + storyID + '">
+    <p>
+        <div name="storyTitle">
+        </div>
+    </p>
+    <p>
+        <div name="storyWriter">
+        </div>
+    </p>
+    <p>
+        <div name="storyText">
+        </div>
+    </p>
+    <p>
+        <div name="storyLikes"></div>
+    </p>
+    <p>
+        <div name="storySpam"></div>
+    </p>
+    <p>
+        <button class="likeButton" name="storyLikeButton" type="button">
+            Like
+        </button>
+        <button class="spamButton" name="storySpamButton" type="button">
+            Spam
+        </button>
+    </p>
+    <p>
+        <button id="yesButton" type="button">
+            Yes
+        </button>
+        <button id="noButton" type="button">
+            No
+        </button>
+        <button id="skipButton" type="button">
+            Skip
+        </button>
+    </p>
+</div>

@@ -1,0 +1,206 @@
+//
+// hard coded variables
+//
+
+var hardPrivateKey = 'C:/Program Files (x86)/nodejs/ssl/private.key';
+var hardCertificate = 'C:/Program Files (x86)/nodejs/ssl/certificate.pem';
+var hardViewEngine = 'ejs';
+// We'll definiately need to change this
+var hardSessionSecret = 'I am a seret code';
+var hardInsecurePort = 3000;
+var hardSecurePort = 3001;
+var hardInsecureServerMessage = 'Insecure server is running @ http://localhost:';
+var hardSecureServerMessage = 'Secure server is running @ https://localhost:';
+var hardStaticFilePath = 'staticFiles';
+
+//
+// Import standard libraries
+//
+
+var http = require('http');
+var https = require('https');
+var fs = require('fs');
+var express = require('express');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var bcrypt = require('bcrypt-nodejs');
+var ejs = require('ejs');
+var path = require('path');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var multer  = require('multer');
+
+//
+// Import custom libraries
+//
+// Assuming everything is in the same folder
+
+// routes
+var route_login = require('./route_login');
+// model
+var Model = require('./model');
+
+//
+// Define key for RSA
+//
+
+var options = {
+	key : fs.readFileSync(hardPrivateKey),
+	cert : fs.readFileSync(hardCertificate)
+};
+
+//
+// Define variables from packages
+//
+
+var app = express();
+var upload = multer();
+
+
+//
+// Begin middleware
+//
+
+// Use static files
+app.use(express.static('staticFiles'));
+
+// Redirects all traffic to https
+app.all('*', function(req, res, next) {
+	if (req.secure) {
+		return next();
+	};
+	// The redirect line will have to change later on
+	// We will also delete console.log later on
+	console.log('https://' + req.hostname + ':' + hardSecurePort + req.url);
+	res.redirect('https://' + req.hostname + ':' + hardSecurePort + req.url);
+});
+
+// Some functions for passport to use
+
+// Will this change during deployment???
+passport.use(new LocalStrategy(function(username, password, done) {
+	new Model.User({
+		username : username
+	}).fetch().then(function(data) {
+		var user = data;
+		if (user === null) {
+			return done(null, false, {
+				message : 'Invalid username or password'
+			});
+		} else {
+			user = data.toJSON();
+			if (!bcrypt.compareSync(password, user.password)) {
+				return done(null, false, {
+					message : 'Invalid username or password'
+				});
+			} else {
+				return done(null, user);
+			}
+		}
+	});
+}));
+
+passport.serializeUser(function(user, done) {
+	done(null, user.username);
+});
+
+passport.deserializeUser(function(username, done) {
+	new Model.User({
+		username : username
+	}).fetch().then(function(user) {
+		done(null, user);
+	});
+});
+
+// Resume middleware
+// Configuring the middleware
+
+// This will be replaced with the location of the views folder
+app.set('views', path.join(__dirname, 'views'));
+// This may change if we don't use ejs anymore, but I doubt that
+app.set('view engine', hardViewEngine);
+
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({
+	// Do we actually want extended?
+	extended : true
+}));
+
+
+
+// Later learn how express session works and also what resave and saveUninitialized are
+// maybe change them later on
+
+app.use(session({
+	secret : hardSessionSecret,
+	resave : true,
+	saveUninitialized : true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Handle http(s) requests
+
+// GET
+app.get('/', route_login.index);
+
+// signin
+// GET
+app.get('/signin', route_login.signIn);
+// POST
+app.post('/signin', route_login.signInPost);
+
+// signup
+// GET
+app.get('/signup', route_login.signUp);
+// POST
+app.post('/signup', route_login.signUpPost);
+
+// logout
+// GET
+app.get('/signout', route_login.signOut);
+
+// createStory
+app.get('/createStory', route_login.createStory);
+
+// upload.array() might need to change if I add pictures later
+app.post('/createStory', upload.array(), route_login.createStoryPost);
+
+// verify signup
+app.get('/verifySignUp', route_login.verifySignUp);
+
+// settings
+app.get('/settings', route_login.settings);
+
+// change password
+app.get('/changePassword', route_login.changePassword);
+
+// change password post
+app.post('/changePasswordPost', route_login.changePasswordPost);
+
+/********************************/
+
+/********************************/
+// 404 not found
+app.use(route_login.notFound404);
+
+
+//
+// Starting the server!
+//
+
+var insecureRedirectServer = http.createServer(app).listen(hardInsecurePort, function(err) {
+	if (err)
+		throw err;
+	var message = hardInsecureServerMessage + insecureRedirectServer.address().port;
+	console.log(message);
+});
+
+var secureServer = https.createServer(options, app).listen(hardSecurePort, function(err) {
+	if (err)
+		throw err;
+	var message = hardSecureServerMessage + secureServer.address().port;
+	console.log(message);
+});
+

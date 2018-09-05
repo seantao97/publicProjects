@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;CreateStoryv0/new_file.js&apos; to &apos;indexJS.js&apos;" description="Rename resource &apos;new_file.js&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="new_file.js" name="indexJS.js" stamp="1467919114046" updateReferences="true"/>
+</session>

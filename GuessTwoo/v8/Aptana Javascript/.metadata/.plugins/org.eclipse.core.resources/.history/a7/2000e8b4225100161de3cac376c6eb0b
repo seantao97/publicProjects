@@ -1,0 +1,76 @@
+/**
+ * @author seant_000
+ */
+
+$(document).ready(function() {
+	var currentStoryDisplayedGuessID = -1;
+
+	if ($("#currentStoryGuessDiv")) {
+		currentStoryDisplayedID = $("#currentStoryGuessDiv").attr("value");
+	};
+});
+
+$(document).on('click', '#yesButton', function() {
+		var data = '{"storyID":' + JSON.stringify(currentStoryDisplayedGuessID) + '}';
+
+		$.ajax({
+			cache : false,
+			url : "/guessSuccess",
+			type : "POST",
+			dataType : "json",
+			headers : {
+				"Content-Type" : "application/json"
+			},
+			data : data,
+			success : function() {
+			},
+			error : function() {
+			}
+		});
+
+		var httpRequest = "/guessNextStory?currentStoryID=" + currentStoryDisplayedID;
+
+		// Proabbly will change in the future
+		$.getJSON(httpRequest, function(data) {
+			if (data.moreStories == "false") {
+				// Once again, change this message later on
+				$("#currentStoryGuessDiv").replaceWith('<div id="noMoreStoriesToGuess">No more stories!</div>');
+			} else {
+				// I have two divs, one from the long function from route and this one--may be inefficient
+				$("#currentStoryGuessDiv").replaceWith(data.nextStory);
+			}
+		});
+});
+
+$(document).on('click', '#yesButton', function() {
+		var data = '{"storyID":' + JSON.stringify(currentStoryDisplayedGuessID) + '}';
+
+		$.ajax({
+			cache : false,
+			url : "/guessYes",
+			type : "POST",
+			dataType : "json",
+			headers : {
+				"Content-Type" : "application/json"
+			},
+			data : data,
+			success : function() {
+			},
+			error : function() {
+			}
+		});
+
+		var httpRequest = "/guess?currentStoryID=" + currentStoryDisplayedID;
+
+		// Proabbly will change in the future
+		$.getJSON(httpRequest, function(data) {
+			if (data.moreStories == "false") {
+				// Once again, change this message later on
+				$("#currentStoryGuessDiv").replaceWith('<div id="noMoreStoriesToGuess">No more stories!</div>');
+			} else {
+				// I have two divs, one from the long function from route and this one--may be inefficient
+				$("#currentStoryGuessDiv").replaceWith(data.nextStory);
+			}
+		});
+});
+

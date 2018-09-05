@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Review Stories</title>
+        <script src= "https://code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src = "clientJS.js"></script>
+        <script src = "reviewStoryJS.js"></script>
+    </head>
+    <body>
+        <h1>Review Stories</h1>
+        <% if(typeof(originalStory) !== 'undefined') {%> <span><%- originalStory %></span>
+        <% } %>
+        <div id="last" name="last">
+            <% if(typeof(lastStoryMessage) !== 'undefined') {%> <span><%= lastStoryMessage %></span>
+            <% } %>
+        </div>
+
+        <button id="getMoreStories" type="button">
+            More
+        </button>
+    </body>
+</html>
+

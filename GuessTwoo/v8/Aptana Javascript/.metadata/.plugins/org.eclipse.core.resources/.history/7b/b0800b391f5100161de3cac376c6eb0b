@@ -1,0 +1,36 @@
+'<div id="currentStoryGuessDiv" value="' + storyID + '">
+    <p>
+        <div name="storyTitle">Title: ' + title + '</div>
+    </p>
+    <p>
+        <div name="storyWriter">Writer: ' + writer + '</div>
+    </p>
+    <p>
+        <div name="storyText">Text: ' + text + '</div>
+    </p>
+    <p>
+        <div name="storyLikes">Likes: ' + likes + '</div>
+    </p>
+    <p>
+        <div name="storySpam">Spam: ' + spam + '</div>
+    </p>
+    <p>
+        <button class="likeButton" name="storyLikeButton" type="button">
+            Like
+        </button>
+        <button class="spamButton" name="storySpamButton" type="button">
+            Spam
+        </button>
+    </p>
+    <p>
+        <button id="yesButton" type="button">
+            Yes
+        </button>
+        <button id="noButton" type="button">
+            No
+        </button>
+        <button id="skipButton" type="button">
+            Skip
+        </button>
+    </p>
+</div>'

@@ -1,0 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>New Web Project</title>
+        <script src = "new_file.js"></script>
+    </head>
+    <body>
+        <h1>New Web Project Page</h1>
+        <button id="create">
+            Create
+        </button>
+        <input type="text" value="inital text" />
+        <select>
+            <option value="Yes!!! :)">Yes!!! :)</option><option value="No... :(">No... :(</option><option value="Not done yet" selected>Not done yet</option>
+        </select>
+    </body>
+</html>
+

@@ -1,0 +1,2 @@
+FIND_BAR_DECORATOR_FIND_ENTRIES=\#\r\n\#Sun Jul 24 02\:17\:10 EDT 2016\r\n19\='>'\r\n18\=render\r\n17\=specific\r\n16\=next\r\n15\=post\r\n14\=\\tif (\\\!req.isAuthenticated()) {\\n\\t\\tres.redirect('/signin');\\n\\t} else {\r\n13\=model\r\n12\=date\r\n11\=\\t\\t\\tvar currentDate \\\= new Date().toMysqlFormat();\\n\r\n10\=toJSON\r\n9\=req.data\r\n8\=req.query\r\n7\=jsonpar\r\n6\=json\r\n5\=req.body.data\r\n4\=data\r\n3\=likeStory\r\n2\=storyPromise\r\n1\=debug\r\n0\=verify\r\n
+eclipse.preferences.version=1

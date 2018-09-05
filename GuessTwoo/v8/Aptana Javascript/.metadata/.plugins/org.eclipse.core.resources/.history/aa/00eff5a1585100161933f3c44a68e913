@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title><%= title %></title>
+      <script src= "https://code.jquery.com/jquery-1.11.2.min.js"></script>
+      <script src = "clientJS.js"></script>	
+   </head>
+   <body>
+      <p>
+         Welcome <strong><%= user.username %></strong>
+         <a href="/signout" title="sign out">sign out</a>
+      </p>
+      <p>
+      	<a href="/guess" title="guess">guess</a>
+      </p>
+      <p>
+      	<a href="/myStories" title="myStories">my stories</a>
+      </p>
+      <p>
+      	<a href="/results" title="myStories">my stories</a>
+      </p>
+      <p>
+      	<a href="/settings" title="settings">settings</a>
+      </p>
+   </body>
+</html>

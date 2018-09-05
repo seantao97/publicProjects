@@ -1,0 +1,21 @@
+/**
+ * @author seant_000
+ */
+
+//
+// Start jQuery
+//
+
+$(document).ready(function() {
+	var storyID = $("#updateConcludeStoryDiv").attr("value");
+	var httpRequest = "/myStories/reviewStories/updateConcludeStory/InitialValues?storyID=" + storyID;
+	
+	// Proabbly will change in the future
+	$.getJSON(httpRequest, function(data) {
+		var title = data.title;
+		var text = data.text;
+		var userComment = data.userComment;
+		 $("#w3s").attr("href", "http://www.w3schools.com/jquery")
+	});
+
+}); 

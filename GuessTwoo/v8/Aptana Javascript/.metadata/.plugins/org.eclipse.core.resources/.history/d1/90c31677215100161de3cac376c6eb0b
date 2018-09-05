@@ -1,0 +1,28 @@
+/**
+ * @author seant_000
+ */
+
+$(document).ready(function() {
+	var currentStoryDisplayedGuessID = -1;
+
+	if ($("#currentStoryGuessDiv")) {
+		currentStoryDisplayedID = $("#currentStoryGuessDiv").attr("value");
+	}
+
+	$("#yesButton").click(function() {
+		var httpRequest = "/guess?currentStoryID=" + currentStoryDisplayedID;
+
+		// Proabbly will change in the future
+		$.getJSON(httpRequest, function(data) {
+			if (data.moreStories == "false") {
+				$("#myStoriesReviewStoriesLastMessage").replaceWith('<div id="myStoriesReviewStoriesLastMessage">No more stories!</div>');
+			} else {
+				// I have two divs, one from the long function from route and this one--may be inefficient
+				var insertDiv = document.createElement('div');
+				$(data.nextStory).insertBefore("#myStoriesReviewStoriesLast");
+				currentStoryDisplayedID = $("#myStoriesReviewStoriesLast").prev().attr("value");
+			}
+		});
+	});
+
+});

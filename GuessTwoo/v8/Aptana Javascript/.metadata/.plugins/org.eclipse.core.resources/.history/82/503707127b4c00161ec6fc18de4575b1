@@ -1,0 +1,7 @@
+/**
+ * @author seant_000
+ */
+
+
+var hardTitleLength = 50;
+var hardStoryLength = 1000;

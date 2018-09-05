@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;UserRegistrationAndLoginv0/server_registration_v0.js&apos; to &apos;server_registration_loginv0.js&apos;" description="Rename resource &apos;server_registration_v0.js&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="server_registration_v0.js" name="server_registration_loginv0.js" stamp="1467426551893" updateReferences="true"/>
+</session>

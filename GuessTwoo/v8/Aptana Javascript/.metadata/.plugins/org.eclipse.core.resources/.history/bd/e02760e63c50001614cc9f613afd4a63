@@ -1,0 +1,7 @@
+/**
+ * @author seant_000
+ */
+
+$(document).ready(function() {
+	var storyID = 
+});

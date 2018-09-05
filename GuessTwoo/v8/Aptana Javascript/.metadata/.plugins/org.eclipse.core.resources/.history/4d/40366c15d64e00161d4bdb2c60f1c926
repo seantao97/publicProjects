@@ -1,0 +1,24 @@
+/**
+ * @author seant_000
+ */
+
+alert('clientJS');
+
+/*
+
+ Hard coded variables in the views
+
+ var hardTitleLength = 50;
+ var hardStoryLength = 1000;
+ var hardTotalTagLength = 1000;
+ var hardUsernameLength = 50;
+ // Not in the database
+ var hardPasswordLength = 50;
+ var hardEmailLength = 50;
+ */
+
+/*
+$(document).ready(function() {
+	//stuff
+});
+*/

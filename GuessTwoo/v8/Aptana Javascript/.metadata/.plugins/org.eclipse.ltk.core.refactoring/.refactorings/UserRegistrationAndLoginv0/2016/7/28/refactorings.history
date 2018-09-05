@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;UserRegistrationAndLoginv0/registation.ejs&apos; to &apos;signup.ejs&apos;" description="Rename resource &apos;registation.ejs&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="registation.ejs" name="signup.ejs" stamp="1467505963472" updateReferences="true"/>
+</session>

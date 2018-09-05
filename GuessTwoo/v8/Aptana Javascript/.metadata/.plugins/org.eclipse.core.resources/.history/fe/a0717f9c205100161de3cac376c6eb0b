@@ -1,0 +1,12 @@
+/**
+ * @author seant_000
+ */
+
+$(document).ready(function() {
+	var currentStoryDisplayedGuessID = -1;
+
+	if ($("#currentStoryGuessDiv")) {
+		currentStoryDisplayedID = $("#currentStoryGuessDiv").attr("value");
+	}
+
+});

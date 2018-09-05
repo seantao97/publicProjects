@@ -1,0 +1,10 @@
+/**
+ * @author seant_000
+ */
+
+// Start jQuery
+
+$(document).ready(function() {
+	var storyID = $("#updateConcludeStoryDiv").attr("value");
+	var storyObj = new 
+});

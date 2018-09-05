@@ -1,0 +1,161 @@
+/**
+ * @author seant_000
+ */
+
+//
+// This route deals with stories in the guess page
+//
+
+//
+// Hard coded variables
+//
+var hardTableNameStory = 'storyv1';
+var hardNoMoreStoriesMessageForGuess = "Sorry, no more stories!";
+
+//
+// Import custom libraries
+//
+
+// model
+// Assuming that everything is in the same folder
+var Model = require('./model');
+var Database = require('./db');
+
+//
+// Helper functions (kinda, I included the div variable in here too)
+//
+
+/*
+ '<div id="currentStoryGuessDiv" value="' + storyID + '">
+ <p>
+ <div name="storyTitle">Title: ' + title + '</div>
+ </p>
+ <p>
+ <div name="storyWriter">Writer: ' + writer + '</div>
+ </p>
+ <p>
+ <div name="storyText">Text: ' + text + '</div>
+ </p>
+ <p>
+ <div name="storyLikes">Likes: ' + likes + '</div>
+ </p>
+ <p>
+ <div name="storySpam">Spam: ' + spam + '</div>
+ </p>
+ <p>
+ <button class="likeButton" name="storyLikeButton" type="button">
+ Like
+ </button>
+ <button class="spamButton" name="storySpamButton" type="button">
+ Spam
+ </button>
+ </p>
+ <p>
+ <button id="yesButton" type="button">
+ Yes
+ </button>
+ <button id="noButton" type="button">
+ No
+ </button>
+ <button id="skipButton" type="button">
+ Skip
+ </button>
+ </p>
+ </div>'
+ */
+function newDivGuess(title, writer, text, likes, spam, storyID) {
+	return '<div id="currentStoryGuessDiv" value="' + storyID + '"> <p> <div name="storyTitle">Title: ' + title + '</div> </p> <p> <div name="storyWriter">Writer: ' + writer + '</div> </p> <p> <div name="storyText">Text: ' + text + '</div> </p> <p> <div name="storyLikes">Likes: ' + likes + '</div> </p> <p> <div name="storySpam">Spam: ' + spam + '</div> </p> <p> <button class="likeButton" name="storyLikeButton" value="' + storyID + '" type="button"> Like </button> <button class="spamButton" name="storySpamButton" value="' + storyID + '" type="button"> Spam </button> </p> <p> <button id="yesButton" type="button"> Yes </button> <button id="noButton" type="button"> No </button> <button id="skipButton" type="button"> Skip </button> </p> </div>';
+};
+
+// check for null and undefined
+// CHECK THIS FUNCTION FOR CORRECTNESS LATER ON!!!
+function checkDefined(checkMe) {
+	if (checkMe == 'undefined' || checkMe == null) {
+		return false;
+	}
+	return true;
+};
+
+//
+// Routing functions
+//
+
+var guess = function(req, res, next) {
+	if (!req.isAuthenticated()) {
+		res.redirect('/signin');
+	} else {
+		var user = req.user;
+		if (user !== undefined) {
+			user = user.toJSON();
+		}
+
+		var userPromise = null;
+		userPromise = new Model.User({
+			username : user.username
+		}).fetch().then(function(model) {
+			var currentStoryID = model.toJSON().currentStory;
+			var storyDB = Database.knex(hardTableNameStory);
+			storyDB.whereNot('user', user.username).andWhere('storyID', '>', currentStoryID).min('storyID as storyID').then(function(firstID) {
+				Database.knex.select('*').from(hardTableNameStory).where('storyID', firstID[0].storyID).then(function(rows) {
+					if (rows.length == 0) {
+						res.render('guess', {
+							noStory : hardNoMoreStoriesMessageForGuess
+						});
+					} else {
+						var originalStory = newDivGuess(rows[0].title, rows[0].user, rows[0].text, rows[0].likes, rows[0].spam, rows[0].storyID);
+						res.render('guess', {
+							originalStory : originalStory
+						});
+					}
+				});
+			});
+		});
+	}
+};
+
+var guessSuccessPost = function(req, res, next) {
+	if (!req.isAuthenticated()) {
+		res.redirect('/signin');
+	} else {
+		// do some stuff
+		var user = req.user;
+		var currentDate = new Date().toMysqlFormat();
+
+		if (user !== undefined) {
+			user = user.toJSON();
+		}
+		var userPromise = new Model.User({
+			username : user.username,
+			currentStory : req.query.storyID
+		}).save(null, {
+			method : 'update'
+		});
+
+		var seenBeforePromise = new Model.SeenBefore({
+			user : user.username,
+			storyID : req.query.storyID,
+			dateSeen : currentDate
+		}).save(null, {
+			method : 'update'
+		});
+
+		var storyPromise = new Model.Story({
+			storyID : req.query.storyID
+		}).fetch(function(model) {
+			var newYesCount = model.toJSON().yes + 1;
+			var newStoryPromise = new Model.Story({
+				storyID : req.query.storyID,
+				yes : newYesCount
+			}).save(null, {
+				method : 'update'
+			});
+		})
+	}
+};
+
+// export functions
+/**************************************/
+
+// guess (get)
+module.exports.guess = guess;
+

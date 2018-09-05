@@ -1,0 +1,145 @@
+/**
+ * @author seant_000
+ */
+
+//
+// This route deals with displaying the results page
+//
+
+//
+// Hard coded variables
+//
+
+var hardTableNameStory = 'storyv1';
+var hardTableNameUserVotes = 'user_votesv1';
+
+//
+// Import custom libraries
+//
+
+// model
+// Assuming that everything is in the same folder
+var Model = require('./model');
+var Database = require('./db');
+
+//
+// Helper functions
+//
+
+// Building the query
+function buildResultsGetNextStory(username, storyTableName, userVotesTableName, currentStoryID) {
+	var query = 'SELECT s.*, uv.vote FROM ' + userVotesTableName + ' AS uv, ' + storyTableName + ' AS s ';
+	query += 'WHERE (s.concluded="s" OR s.concluded="f") AND s.storyID=uv.storyID AND uv.user="' + username + '"';
+	query += ' AND uv.vote <> "x"' + ' AND s.storyID > ' + currentStoryID;
+	return query;
+};
+
+// THIS IS NO LONGER ACCURATE
+/*
+<div name="currentStoryResultsDiv" class="currentStoryResultsDiv" value="">
+<p>
+<div name="storyTitle"></div>
+</p>
+<p>
+<div name="storyWriter"></div>
+</p>
+<p>
+<div name="storyText"></div>
+</p>
+<p>
+<div name="userComment"></div>
+</p>
+<p>
+<div name="yes"></div>
+</p>
+<p>
+<div name="no"></div>
+</p>
+<p>
+<div name="storyLikes"></div>
+</p>
+<p>
+<div name="storySpam"></div>
+</p>
+<p>
+<button class="likeButton" name="storyLikeButton" type="button">
+Like
+</button>
+<button class="spamButton" name="storySpamButton" type="button">
+Spam
+</button>
+</p>
+</div>
+*/
+// div builder for new result
+function divResultsBuilder(title, writer, text, userComment, concluded, yourVote, yes, no, likes, spam, storyID) {
+	return '<div name="storyResultsDiv" class="storyResultsDiv" value="' + storyID + '"> <p> <div name="storyTitle">Title: ' + title + '</div> </p> <p> <div name="storyWriter">Writer: ' + writer + '</div> </p> <p> <div name="storyText">Text: ' + text + '</div> </p> <p><div name="resultOfStory">Actual: ' + concluded + ' Your vote: ' + yourVote + '</div></p><p> <div name="userComment">Writer comment: ' + userComment + '</div> </p> <p> <div name="yes">Yes votes: ' + yes + '</div> </p> <p> <div name="no">No votes: ' + no + '</div> </p> <p> <div name="storyLikes">Likes: ' + likes + '</div> </p> <p> <div name="storySpam">Spam: ' + spam + '</div> </p> <p> <button class="likeButton" name="storyLikeButton" value="' + storyID + '" type="button"> Like </button> <button class="spamButton" name="storySpamButton" value="' + storyID + '" type="button"> Spam </button> </p> </div>';
+}
+
+//
+// Begin routing functions
+//
+
+// results
+var results = function(req, res, next) {
+	if (!req.isAuthenticated()) {
+		res.redirect('/signin');
+	} else {
+		var user = req.user;
+		if (user !== undefined) {
+			user = user.toJSON();
+		}
+		var knex = Database.knex;
+		var query = buildResultsGetNextStory(user.username, hardTableNameStory, hardTableNameUserVotes, -1);
+		knex.raw(query).then(function(rows) {
+			if (rows.length == 0) {
+				res.render('results', {
+					noStoriesMessage : "No results to show"
+				});
+			} else {
+				var newDiv = divResultsBuilder(rows[0][0].title, rows[0][0].user, rows[0][0].text, rows[0][0].userComment, rows[0][0].concluded, rows[0][0].vote, rows[0][0].yes, rows[0][0].no, rows[0][0].likes, rows[0][0].spam, rows[0][0].storyID);
+				res.render('results', {
+					originalStory : newDiv
+				});
+			}
+		});
+	}
+};
+
+// results get more stories
+var resultsGetMoreStories = function(req, res, next) {
+	var results = function(req, res, next) {
+		if (!req.isAuthenticated()) {
+			res.redirect('/signin');
+		} else {
+			var user = req.user;
+			if (user !== undefined) {
+				user = user.toJSON();
+			}
+			var knex = Database.knex;
+			var query = buildResultsGetNextStory(user.username, hardTableNameStory, hardTableNameUserVotes, req.query.currentStoryId);
+			knex.raw(query).then(function(rows) {
+				if (rows.length == 0) {
+					res.render('results', {
+						noStoriesMessage : "No results to show"
+					});
+				} else {
+					var newDiv = divResultsBuilder(rows[0][0].title, rows[0][0].user, rows[0][0].text, rows[0][0].userComment, rows[0][0].concluded, rows[0][0].vote, rows[0][0].yes, rows[0][0].no, rows[0][0].likes, rows[0][0].spam, rows[0][0].storyID);
+					res.render('results', {
+						originalStory : newDiv
+					});
+				}
+			});
+		}
+	};
+};
+
+// export functions
+/**************************************/
+
+// results
+module.exports.results = results;
+
+// results get more stories
+module.exports.resultsGetMoreStories = resultsGetMoreStories;
+

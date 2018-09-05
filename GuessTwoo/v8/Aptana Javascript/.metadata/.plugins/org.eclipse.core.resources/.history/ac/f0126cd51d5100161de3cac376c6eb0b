@@ -1,0 +1,31 @@
+<div id="storyOriginal" value="' + storyID + '" >
+    <p>
+        <div name="storyTitle">
+            Title: ' + title + '
+        </div>
+    </p>
+    <p>
+        <div name="storyText">
+            Text: ' + text + '
+        </div>
+    </p>
+    <p>
+        <div name="storyLikes">
+            Likes: ' + likes + '
+        </div>
+    </p>
+    <p>
+        <div name="storySpam">
+            Spam: ' + spam + '
+        </div>
+    </p>
+    <button class="likeButton" name="storyLikeButton" value="' + storyID + '" type="button">
+        Like
+    </button>
+    <button class="spamButton" name="storySpamButton" value="' + storyID + '" type="button">
+        Spam
+    </button>
+    <p>
+        <a href="/myStories/reviewStories/updateConcludeStory?currentStoryID=' + storyID + '">Update/Conclude</a>
+    </p>
+</div>

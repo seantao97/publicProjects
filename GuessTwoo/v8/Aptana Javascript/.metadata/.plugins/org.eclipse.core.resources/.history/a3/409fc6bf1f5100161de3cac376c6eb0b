@@ -1,0 +1,8 @@
+/**
+ * @author seant_000
+ */
+
+$(document).ready(function() {
+	var currentStoryDisplayedGuessID = -1;
+
+}); 

@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Change Password</title>
+	</head>
+	<body>
+		<h1>Change Password</h1>
+		<form method="post" id="changePasswordForm" action="/changePasswordPost">
+			<p>
+				<label for="username">username</label>
+				<input type="text" name="username" id="username"
+				placeholder="username"  maxlength=50 required="required"/>
+			</p>
+			<p>
+				<label for="oldPassword">old password</label>
+				<input type="text" name="oldPassword" id="oldPassword"
+				placeholder="old pPassword" maxlength=50 required="required"/>
+			</p>
+			<p>
+				<label for="newPassword1">new password</label>
+				<input type="text" name="newPassword" id="newPassword"
+				placeholder="new password" maxlength=50 required="required"/>
+			</p>
+			<!-- Confirm password to be implemented later
+			<p>
+				<label for="newPassword2">new password</label>
+				<input type="text" name="newPassword2" id="newPassword2"
+				placeholder="confirm new password" maxlength=50 required="required"/>
+			</p>
+			-->
+			<p>
+				<input type="submit" name="changePassword" id="changePassword" value="Confirm"/>
+			</p>
+
+		</form>
+	</body>
+</html>
+

@@ -1,0 +1,66 @@
+/**
+ * @author seant_000
+ */
+
+//
+// Helper functions
+//
+
+/*
+<div id="storyOriginal" value=... >
+<p>
+<div name="storyTitle"></div>
+</p>
+<p>
+<div name="storyText"></div>
+</p>
+<p>
+<div name="storyLikes"></div>
+</p>
+<p>
+<div name="storySpam"></div>
+</p>
+<button class="likeButton" name="storyLikeButton" value=... type="button">
+Like
+</button>
+<button class="spamButton" name="storySpamButton" value=... type="button">
+Spam
+</button>
+</div>
+*/
+
+// THIS IS BROKEN AND DOESN'T EXACTLY CREATE THE ABOVE HTML
+var newDiv = function(title, text, likes, spam, storyID) {
+	return '<div id="storyOriginal" value="' + storyID + '" ><p><div name="storyTitle">Title: ' + title + '</div></p><p><div name="storyText">Text: ' + text + '</div></p><p><div name="storyLikes">Likes: ' + likes + '</div></p><p><div name="storySpam">Spam: ' + spam + '</div></p><button class="likeButton" name="storyLikeButton" value="' + storyID + '" type="button">Like</button><button class="spamButton" name="storySpamButton" value="' + storyID + '" type="button">Spam</button></div>';
+};
+
+//
+// On load stuff
+//
+
+$(document).ready(function() {
+	var currentStoryDisplayedID = -1;
+	console.log("current ID: " + currentStoryDisplayedID);
+	if ($("#storyOriginal")) {
+		currentStoryDisplayedID = $("#storyOriginal").attr("value");
+	}
+
+	// DON'T FORGET TO UPDATE CURRENTSTORYDISPLAYID EVERY TIME!!!
+
+	$("#myStoriesReviewStoriesGetMoreStories").click(function() {
+		var httpRequest = "/myStories/reviewStories/getMoreStories?currentStoryID=" + currentStoryDisplayedID;
+
+		// Proabbly will change in the future
+		$.getJSON(httpRequest, function(data) {
+			if(data.moreStories.localeCompare("false")) {
+				$("#myStoriesReviewStoriesLastMessage").replaceWith('<div id="myStoriesReviewStoriesLastMessage">No more stories!</div>');
+			}
+			else {
+				data.nextStory.insertBefore($("#myStoriesReviewStoriesLast"));
+				currentStoryDisplayedID = $("#myStoriesReviewStoriesLast").prev().attr("value");
+				console.log("current ID: " + currentStoryDisplayedID);
+			}
+		});
+	});
+
+});
